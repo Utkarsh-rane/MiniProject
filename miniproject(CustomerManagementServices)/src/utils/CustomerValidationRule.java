@@ -2,6 +2,7 @@ package utils;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Iterator;
 import java.util.List;
 
 import com.app.customer.Customer;
@@ -12,15 +13,15 @@ import cust_exception.InvalidCustomerException;
 public class CustomerValidationRule {
 	//All validations
 	public static Customer ValidateAll(String firstname, String lastname, String email, String passwd, Double regAmt,
-			String dob,String plan,List<Customer> cust) throws InvalidCustomerException
+			String dob,String plan,String subscriptionPaidDate,List<Customer> cust) throws InvalidCustomerException
 	{
 		validateEmail(email,cust);
 		
 		LocalDate d=LocalDate.parse(dob);
-	
+		LocalDate d1=LocalDate.parse(subscriptionPaidDate);
 		ServicePlan sp= validatePlanandAmt(plan,regAmt);
 		validateage(dob);
-		return new Customer( firstname,  lastname,  email , passwd, regAmt,d, sp);
+		return new Customer( firstname,  lastname,  email , passwd, regAmt,d, sp,d1);
 	}
 	
 	//Chacking Service plan validating and parse
@@ -54,6 +55,17 @@ public class CustomerValidationRule {
 			throw new InvalidCustomerException("you are under age");
 		System.out.println("you can proced");
 	}
+	
+	//parseandValidateSubscriptionDate
+	public static LocalDate parseandValidateSubscriptionDate(String subscriptionPaidDate) throws InvalidCustomerException
+	{
+		LocalDate sd1=LocalDate.parse(subscriptionPaidDate);
+		long period=Period.between(sd1,LocalDate.now() ).toTotalMonths();
+		if(period>3)
+			throw new InvalidCustomerException("subscription is over ");
+		return sd1;
+	}
+	
    // add a static method for customer login
 	public static Customer customerlogin(String email,String passwd,List<Customer> cust) throws InvalidCustomerException
 	{
@@ -70,3 +82,13 @@ public class CustomerValidationRule {
 	}
 	
 }
+/*Iterator<Customer> itr=cust.iterator();
+						while (itr.hasNext())
+							
+						 customer=itr.next();
+						Long period=Period.between(customer.getsubscriptionPaidDate(), LocalDate.now()).toTotalMonths();
+							if(period>3)
+							{
+						itr.remove();
+						break;
+							}*/
