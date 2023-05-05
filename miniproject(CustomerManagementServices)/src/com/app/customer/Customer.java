@@ -1,6 +1,7 @@
 package com.app.customer;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 public class Customer implements Comparable<Customer> {
 	private  int custId;
@@ -12,14 +13,14 @@ public class Customer implements Comparable<Customer> {
 	private LocalDate dob;
 	private static int counter;
 	private ServicePlan plan;
-	
+	private LocalDate subscriptionPaidDate; 
 	static
 	{
 		counter=100;
 	}
 	
 	public Customer( String firstname, String lastname, String email, String passwd, Double regAmt,
-			LocalDate dob,ServicePlan plan) {
+			LocalDate dob,ServicePlan plan,LocalDate subscriptionPaidDate) {
 		super();
 		this.custId = counter++;
 		this.firstname = firstname;
@@ -29,6 +30,7 @@ public class Customer implements Comparable<Customer> {
 		this.regAmt = regAmt;
 		this.dob = dob;
 		this.plan=plan;
+		this.subscriptionPaidDate=subscriptionPaidDate;
 	}
 	public Customer(String email) {
 		super();
@@ -69,12 +71,21 @@ public class Customer implements Comparable<Customer> {
 
 
 
+	public LocalDate getsubscriptionPaidDate() {
+		return subscriptionPaidDate;
+	}
+	public void setsubscriptionPaidDate(LocalDate subscriptionPaidDate) {
+		this.subscriptionPaidDate = subscriptionPaidDate;
+	}
+	
+	
+	
 	@Override
 	public String toString() {
 		return "Customer [custId=" + custId + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email
-				+ ", regAmt=" + regAmt + ", dob=" + dob + "]";
+				+ ", passwd=" + passwd + ", regAmt=" + regAmt + ", dob=" + dob + ", plan=" + plan
+				+ ", subscriptionPaidDate=" + subscriptionPaidDate + "]";
 	}
-	
 	@Override
 	public boolean equals(Object o)
 	{
@@ -88,6 +99,12 @@ public class Customer implements Comparable<Customer> {
 	public int compareTo(Customer o) {
 		System.out.println("inside compareto");
 		return this.email.compareTo(o.email);
+	}
+	public int period(LocalDate subscriptionPaidDate)
+	{
+		int d1=Period.between(getsubscriptionPaidDate(), LocalDate.now()).getMonths();
+		return d1;
+		
 	}
 	
 }
