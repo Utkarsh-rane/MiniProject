@@ -1,18 +1,17 @@
 package tester;
 
-
-import static utils.CustomerValidationRule.ValidateAll;
+import static utils.CustomerValidationRule.*;
 import static utils.CustomerValidationRule.customerlogin;
 import static utils.Customerutils.customer;
-
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
-
 import com.app.customer.Customer;
 import com.app.customer.ServicePlan;
-
 import cust_exception.InvalidCustomerException;
 
 public class Tester {
@@ -34,7 +33,8 @@ public class Tester {
 			System.out.println();
 			System.out.println("-------Options for Customer--------------");
 			System.out.println("1.sign up\n2.sign in \n3.update pasword \n4.unsubscribe user \n5.Display All customer "
-					+ " \n6.Display All customer in accending \n7.Display All customer sort as per dob n reg amount \n 0.exit");
+					+ " \n6.Display All customer in accending \n7.Display All customer sort as per dob n reg amount \n"
+					+ "\n8.update Subscription \n9.delete customer detail,who not paid subscription  0.exit");
 
 			
 			while (!exit)
@@ -45,9 +45,9 @@ public class Tester {
 					case 1:
 				
 							System.out.println(
-									"enter  firstname,  lastname,  email,  passwd,  regAmt ,dob (yyyy-MM-dd),plan_name");
+									"enter  firstname,  lastname,  email,  passwd,  regAmt ,dob (yyyy-MM-dd),plan_name,SubscriptionPaidDate");
 							Customer customer = ValidateAll(sc.next(), sc.next(), sc.next(),
-									sc.next(), sc.nextDouble(), sc.next(), sc.next(), cust);
+									sc.next(), sc.nextDouble(), sc.next(), sc.next(),sc.next(), cust);
 							cust.add(customer);
 							System.out.println("sucessfully registered!!!!!!!!!!!");
 						
@@ -61,6 +61,7 @@ public class Tester {
 					case 3:
 						System.out.println("enter email and password ");
 						customer=customerlogin(sc.next(),sc.next(),cust);
+						System.out.println("enter new password");
                         customer.setPasswd(sc.next());
                         	System.out.println("password set sucessful");
                         		
@@ -108,6 +109,36 @@ public class Tester {
 						for(Customer c: cust)
 						System.out.println(c);
 						break;
+					case 8:
+						System.out.println("enter email and password ");
+						customer=customerlogin(sc.next(),sc.next(),cust);
+						System.out.println("your last subscription date:");
+					     
+						int month=Period.between(customer.getsubscriptionPaidDate(),LocalDate.now()).getMonths();
+						System.out.println(customer.getsubscriptionPaidDate());
+						
+						if(month>3)
+						{
+						System.out.println("Pay amount to renew suscribtion");
+						customer.setsubscriptionPaidDate(LocalDate.now());
+						}
+						else
+							System.out.println("your plan is upto date");
+						
+						break;
+					case 9:
+					
+						Iterator<Customer> itr=cust.iterator();
+						while (itr.hasNext())	
+						{
+						customer=itr.next();
+						Long period=Period.between(customer.getsubscriptionPaidDate(), LocalDate.now()).toTotalMonths();
+							if(period>3)
+							{
+						itr.remove();
+							}
+						}
+						break;
 					case 0:
 						exit = true;
 						break;
@@ -117,6 +148,7 @@ public class Tester {
 				e.printStackTrace();
 					//System.out.println(e.getMessage());
 					//System.out.println(e);
+				sc.nextLine();
 				}
 			}
 		}
