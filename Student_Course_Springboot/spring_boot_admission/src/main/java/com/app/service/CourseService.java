@@ -14,4 +14,6 @@ public interface CourseService {
 
 	String updateFeeOfCourses(Long id, double fee);
 
+	String deletecourse(Long cid);
+
 }

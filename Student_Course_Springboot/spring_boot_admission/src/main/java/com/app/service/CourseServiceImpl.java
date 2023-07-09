@@ -12,6 +12,8 @@ import com.app.custom_exceptions.ResourceNotFoundException;
 import com.app.dto.CourseDto;
 import com.app.entity.Course;
 import com.app.repository.CourseRepo;
+
+import io.swagger.v3.oas.models.responses.ApiResponse;
 @Service
 @Transactional
 public class CourseServiceImpl implements CourseService {
@@ -38,6 +40,15 @@ private ModelMapper mapper;
 	Course cors=cRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("id not found"));
 	cors.setFees(fee);
 		return "Updated course fees of " + cors.getTitle() + " to new fees : " + fee;
+	}
+
+	@Override
+	public String deletecourse(Long cid) {
+	    if(cRepo.existsById(cid)) {
+	    	cRepo.deleteById(cid);
+	    	return "course deleted success";
+	    }
+		return "course id not match";
 	}
 	
 
