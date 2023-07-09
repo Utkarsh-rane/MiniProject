@@ -1,0 +1,14 @@
+In this project we can able manage and maintain the students and there respective courses
+we are going to perform curd operation on student such as: 
+1>add new student
+2>get all students
+3>get students in specific course
+4> update student details
+5>update student specific details
+6>remove the students
+
+we are going to perform curd operation on courses such as:
+1>add new course
+2>get all courses
+3>update course details
+4>delete course
